@@ -1,0 +1,23 @@
+<package>  
+
+  <name>rob_moveit_pack</name>  
+  <version>0.4.0</version>  
+  <description>rob metapackage based on moveit</description>  
+  <maintainer email="zhanggx0102@163.com">Shawn Zhang</maintainer>  
+  
+  <license>BSD</license>  
+  <author email="zhanggx0102@163.com">Maintained by Shawn Zhang</author>  
+  <buildtool_depend>catkin</buildtool_depend>  
+
+  <run_depend>rob_description</run_depend> 
+  <run_depend>rob_moveit_config</run_depend>
+  <run_depend>rob_control</run_depend> 
+<!-- 
+  <run_depend>rob_moveit_interface</run_depend>  
+-->
+
+  <export>  
+    <metapackage/>  
+  </export> 
+ 
+</package>  

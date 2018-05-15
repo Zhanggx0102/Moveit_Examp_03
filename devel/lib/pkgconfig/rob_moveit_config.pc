@@ -1,0 +1,8 @@
+prefix=/home/shawn/1_catkin_files/ipal_files/22_moveit_example_3/devel
+
+Name: rob_moveit_config
+Description: Description of rob_moveit_config
+Version: 0.3.0
+Cflags: 
+Libs: -L/home/shawn/1_catkin_files/ipal_files/22_moveit_example_3/devel/lib 
+Requires: 

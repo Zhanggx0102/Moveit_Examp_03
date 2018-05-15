@@ -1,0 +1,6 @@
+<launch>
+
+	<node pkg="rob_control" name="rob_control" type="rob_control" output="screen"> <!--launch-prefix="xterm−e"-->
+	</node>
+
+</launch>

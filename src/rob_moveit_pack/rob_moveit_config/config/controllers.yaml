@@ -1,0 +1,24 @@
+#controller_manager_ns: controller_manager
+
+controller_list:
+ - name: r_rob_mover
+   action_ns: follow_joint_trajectory
+   type: FollowJointTrajectory
+   default: true
+   joints:
+      - r_shoulder_joint
+      - r_bigarm_joint
+      - r_rotatearm_joint
+      - r_elbow_joint
+      - r_wrist_joint
+
+ - name: l_rob_mover
+   action_ns: follow_joint_trajectory
+   type: FollowJointTrajectory
+   default: true
+   joints:
+      - l_shoulder_joint
+      - l_bigarm_joint
+      - l_rotatearm_joint
+      - l_elbow_joint
+      - l_wrist_joint

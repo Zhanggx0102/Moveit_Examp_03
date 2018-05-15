@@ -1,0 +1,502 @@
+<?xml version="1.0"?>
+<robot name="rob_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Include materials -->
+
+    <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+    <material name="orange">
+         <color rgba="1 0.43 0 1"/>
+    </material>
+
+    <material name="yellow">
+         <color rgba="0 1 1 1"/>
+    </material>
+
+    <material name="blue">
+      <color rgba="0 0 0.9 1"/>
+    </material>
+
+    <material name="green">
+      <color rgba="0.5 0.95 0.95 1"/>
+    </material>
+
+<!-- Constants -->
+    <property name="deg_to_rad" value="0.01745329251994329577"/>
+    <property name="M_PI" value="3.14159"/>
+
+<!-- inertial matrix macro definition -->
+   <xacro:macro name="inertial_matrix" params="mass">
+      <inertial>
+      	<mass value="${mass}" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="1.0" />
+      </inertial>
+   </xacro:macro>
+
+<!-- transmission block macro definition -->
+    <xacro:macro name="transmission_block" params="joint_name">
+	  <transmission name="tran1">
+	    <type>transmission_interface/SimpleTransmission</type>
+	    <joint name="${joint_name}">
+	      <hardwareInterface>PositionJointInterface</hardwareInterface>
+	    </joint>
+	    <actuator name="motor1">
+	      <hardwareInterface>PositionJointInterface</hardwareInterface>
+	      <mechanicalReduction>1</mechanicalReduction>
+	    </actuator>
+	  </transmission>
+    </xacro:macro>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- BASE LINK AND -->
+  <link name="base_link">
+  	<visual>
+        	<!-- <origin xyz="-0.22 -0.15 0.00" rpy="0 0 0" />  -->
+          <origin xyz="0.1 -0.11 0.13" rpy="0 0 1.570796" /> 
+        	<geometry>
+				<mesh filename="package://rob_description/meshes/body_link_humanoid.dae"/>
+        	</geometry>
+      		<material name="green" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="0.0 0.0 0.0" rpy="0 0 0" /> <!--  -->
+        	<geometry>
+	        	  <mesh filename="package://rob_description/meshes/body_link_humanoid.dae"/>
+        	</geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/green</material>
+  </gazebo>
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- left shoulder link and joint -->
+  <joint name="l_shoulder_joint" type="revolute">  
+    <parent link="base_link"/>
+    <child link="l_shoulder_link"/>
+    <origin xyz="0 0.11 0.74" rpy="0 0 3.14159" />
+    <axis xyz="0 1 0" />
+    <limit effort="300" velocity="${0.2*0.6981}" lower="-0.43633" upper="3.0543"/><!-- (-25  +175)=(-25 175) -->
+    <!-- velocity: m/s for prismatic, rad/s for revolute -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="l_shoulder_joint"/>
+
+  <link name="l_shoulder_link">
+  	<visual>
+        	<origin xyz="-0.04 0.02 0.04" rpy="1.5708 1.5708 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_shoulder_link.dae"/>
+        	</geometry>
+      		<material name="green" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="-0.04 0.02 0.04" rpy="1.5708 1.5708 0" />
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_shoulder_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="l_shoulder_link">
+    <material>Gazebo/green</material>
+  </gazebo>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- left bigarm link and joint -->
+
+  <joint name="l_bigarm_joint" type="revolute">  
+    <parent link="l_shoulder_link"/>
+    <child link="l_bigarm_link"/>
+    <origin xyz="0 -0.04 0" rpy="0 0 3.14159" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="${0.2*0.8378}" lower="0" upper="1.13446"/><!--(0  65)=(0 65) -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="l_bigarm_joint"/>
+
+  <link name="l_bigarm_link">
+  	<visual>
+        	<origin xyz="-0.03 -0.03 -0.1" rpy="0 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_bigarm_link.dae"/>
+        	</geometry>
+      		<material name="orange" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="-0.03 -0.03 -0.1" rpy="0 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_bigarm_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="l_bigarm_link">
+    <material>Gazebo/orange</material>
+  </gazebo>
+
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- left rotatearm link and joint -->
+
+  <joint name="l_rotatearm_joint" type="revolute">  
+    <parent link="l_bigarm_link"/>
+    <child link="l_rotatearm_link"/>
+    <origin xyz="0 0 -0.1" rpy="0 0 1.5708" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="${0.2*1.5708}" lower="-1.39626" upper="1.39626"/><!--(-80  80)=(-80  80) -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="l_rotatearm_joint"/>
+
+  <link name="l_rotatearm_link">
+  	<visual>
+        	<origin xyz="-0.03 0.03 0" rpy="${M_PI} 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_rotatearm_link.dae"/>
+        	</geometry>
+      		<material name="White" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="-0.03 0.03 0" rpy="${M_PI} 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_rotatearm_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="l_roatatearm_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!--left forearm link and joint -->
+ 
+  <joint name="l_elbow_joint" type="revolute">  
+    <parent link="l_rotatearm_link"/>
+    <child link="l_forearm_link"/>
+    <origin xyz="0 0 -0.053" rpy="${M_PI} 0 ${M_PI}" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="${0.2*1.4835}" lower="0" upper="1.5708"/><!--(0 90)=(-90 0) -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="l_elbow_joint"/>
+
+  <link name="l_forearm_link">
+  	<visual>
+        	<origin xyz="-0.0225 0.0225 0.1" rpy="3.1415926 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_forearm_link.dae"/>
+        	</geometry>
+      		<material name="orange" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="-0.0225 0.0225 0.1" rpy="3.1415926 0 0" />
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_forearm_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="l_forearm_link">
+    <material>Gazebo/orange</material>
+  </gazebo>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- left hand link and joint -->
+
+  <joint name="l_wrist_joint" type="revolute">  
+    <parent link="l_forearm_link"/>
+    <child link="l_hand_link"/>
+    <origin xyz="0 0 0.1" rpy="${M_PI} 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="${0.2*1.8326}" lower="-1.39626" upper="1.39626"/> <!--(-80  80)=(-80  80) -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="l_wrist_joint"/>
+
+  <link name="l_hand_link">
+  	<visual>
+        	<origin xyz="-0.0225 -0.0225 0" rpy="-${M_PI} 0 ${M_PI/2}"/> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_hand_link.dae"/>
+        	</geometry>
+      		<material name="green" />
+  	</visual>
+
+  	<collision>
+        <origin xyz="-0.0225 -0.0225 0" rpy="-${M_PI} 0 ${M_PI/2}"/> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/l_hand_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="l_hand_link">
+    <material>Gazebo/orange</material>
+  </gazebo>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+ <!-- left Grasping frame -->
+  <joint name="l_grasping_frame_joint" type="fixed">
+      <parent link="l_hand_link"/>
+      <child link="l_grasping_frame"/>
+      <origin xyz="0 0 -0.070" rpy="0 0 0"/>  <!-- hand long 75 mm =0.075 -->
+  </joint>
+
+  <link name="l_grasping_frame">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.0001"/>
+        <cuboid_inertia mass="0.0001" x="0.001" y="0.001" z="0.001"/>
+        <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+        <origin xyz="0 0 0"/>
+        <geometry>
+            <box size="0.005 0.005 0.005" />
+        </geometry>
+        <material name="White" />
+    </visual>
+  </link>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- right shoulder link and joint -->
+
+  <joint name="r_shoulder_joint" type="revolute">  
+    <parent link="base_link"/>
+    <child link="r_shoulder_link"/>
+    <origin xyz="0 -0.11 0.74" rpy="0 0 3.14159" />
+    <axis xyz="0 1 0" />
+    <limit effort="300" velocity="${0.2*0.7505}" lower="-0.43633" upper="3.0543"/>  <!-- (-25  +175)=(-25  +175) -->
+    <!-- <limit effort="3000" velocity="0.7505" lower="-${M_PI}" upper="${M_PI}"/> -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="r_shoulder_joint"/>
+
+  <link name="r_shoulder_link">
+  	<visual>
+        	<origin xyz="0.04 -0.02 0.04" rpy="-1.5708 1.5708 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_shoulder_link.dae"/>
+        	</geometry>
+      		<material name="green" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="0.04 -0.02 0.04" rpy="-1.5708 1.5708 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_shoulder_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="r_shoulder_link">
+    <material>Gazebo/green</material>
+  </gazebo>
+
+ <!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- right bigarm link and joint -->
+
+  <joint name="r_bigarm_joint" type="revolute">  
+    <parent link="r_shoulder_link"/>
+    <child link="r_bigarm_link"/>
+    <origin xyz="0 0.04 0" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="${0.2*0.9338}" lower="0" upper="1.13446"/>  <!--(0  65)=(0 65) -->
+    <!-- <limit effort="3000" velocity="0.9338" lower="-${M_PI}" upper="${M_PI}"/> -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="r_bigarm_joint"/>
+
+  <link name="r_bigarm_link">
+  	<visual>
+        	<origin xyz="-0.03 -0.03 -0.1" rpy="0 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_bigarm_link.dae"/>
+        	</geometry>
+      		<material name="orange" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="-0.03 -0.03 -0.1" rpy="0 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_bigarm_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="r_bigarm_link">
+    <material>Gazebo/orange</material>
+  </gazebo>
+
+ <!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- right rotatearm link and joint -->
+
+  <joint name="r_rotatearm_joint" type="revolute">  
+    <parent link="r_bigarm_link"/>
+    <child link="r_rotatearm_link"/>
+    <origin xyz="0 0 -0.1" rpy="3.1415926 0.0 1.5708" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="${0.2*2.0944}" lower="-1.39626" upper="1.39626"/> <!--(-80  80)=(-80  80) -->
+    <!-- <limit effort="3000" velocity="2.0944" lower="-${M_PI}" upper="${M_PI}"/> -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="r_rotatearm_joint"/>
+
+  <link name="r_rotatearm_link">
+  	<visual>
+        	<origin xyz="-0.03 -0.03 0" rpy="0 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_rotatearm_link.dae"/>
+        	</geometry>
+      		<material name="White" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="-0.03 -0.03 0" rpy="0 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_rotatearm_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="r_rptatearm_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!--right forearm link and joint -->
+ 
+  <joint name="r_elbow_joint" type="revolute">  
+    <parent link="r_rotatearm_link"/>
+    <child link="r_forearm_link"/>
+    <origin xyz="0 0 .053" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="${0.2*1.3648}" lower="0" upper="1.5708"/> <!--(0 90)=(0 90) -->
+    <!-- <limit effort="3000" velocity="1.3648" lower="-${M_PI}" upper="${M_PI}"/> -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="r_elbow_joint"/>
+
+  <link name="r_forearm_link">
+  	<visual>
+        	<origin xyz="-0.0225 0.0225 0.1" rpy="3.1415926 0 0" /> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_forearm_link.dae"/>
+        	</geometry>
+      		<material name="orange" />
+  	</visual>
+
+  	<collision>
+        	<origin xyz="-0.0225 0.0225 0.1" rpy="3.1415926 0 0" />
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_forearm_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="r_forearm_link">
+    <material>Gazebo/orange</material>
+  </gazebo>
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- right hand link and joint -->
+
+  <joint name="r_wrist_joint" type="revolute">  
+    <parent link="r_forearm_link"/>
+    <child link="r_hand_link"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="${0.2*2.0944}" lower="-1.39626" upper="1.39626"/>   <!--(-80  80)=(-80  80) -->
+    <!-- <limit effort="3000" velocity="2.0944" lower="-${M_PI}" upper="${M_PI}"/> -->
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+ <xacro:transmission_block joint_name="r_wrist_joint"/>
+
+  <link name="r_hand_link">
+  	<visual>
+        	<origin xyz="0.0225 -0.0225 0" rpy="0 0 1.5708"/> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_hand_link.dae"/>
+        	</geometry>
+      		<material name="green" />
+  	</visual>
+
+  	<collision>
+        <origin xyz="0.0225 -0.0225 0" rpy="0 0 1.5708"/> 
+        	<geometry>
+	        	<mesh filename="package://rob_description/meshes/r_hand_link.dae"/>
+        	</geometry>
+        </collision>>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="r_hand_link">
+    <material>Gazebo/green</material>
+  </gazebo>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
+ <!-- right Grasping frame -->
+  <joint name="r_grasping_frame_joint" type="fixed">
+      <parent link="r_hand_link"/>
+      <child link="r_grasping_frame"/>
+      <origin xyz="0 0 0.070" rpy="0 0 0"/>  <!-- hand long 75 mm =0.075 -->
+  </joint>
+
+  <link name="r_grasping_frame">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.0001"/>
+        <cuboid_inertia mass="0.0001" x="0.001" y="0.001" z="0.001"/>
+        <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+        <origin xyz="0 0 0"/>
+        <geometry>
+            <box size="0.005 0.005 0.005" />
+        </geometry>
+        <material name="White" />
+    </visual>
+  </link>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/rob_robot</robotNamespace>
+    </plugin>
+  </gazebo>
+
+</robot>

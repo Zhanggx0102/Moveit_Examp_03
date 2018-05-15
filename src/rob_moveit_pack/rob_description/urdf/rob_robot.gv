@@ -1,0 +1,41 @@
+digraph G {
+node [shape=box];
+"base_link" [label="base_link"];
+"l_shoulder_link" [label="l_shoulder_link"];
+"l_bigarm_link" [label="l_bigarm_link"];
+"l_rotatearm_link" [label="l_rotatearm_link"];
+"l_forearm_link" [label="l_forearm_link"];
+"l_hand_link" [label="l_hand_link"];
+"l_grasping_frame" [label="l_grasping_frame"];
+"r_shoulder_link" [label="r_shoulder_link"];
+"r_bigarm_link" [label="r_bigarm_link"];
+"r_rotatearm_link" [label="r_rotatearm_link"];
+"r_forearm_link" [label="r_forearm_link"];
+"r_hand_link" [label="r_hand_link"];
+"r_grasping_frame" [label="r_grasping_frame"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base_link" -> "l_shoulder_joint" [label="xyz: 0 0.11 0.74 \nrpy: 0 -0 3.14159"]
+"l_shoulder_joint" -> "l_shoulder_link"
+"l_shoulder_link" -> "l_bigarm_joint" [label="xyz: 0 -0.04 0 \nrpy: 0 -0 3.14159"]
+"l_bigarm_joint" -> "l_bigarm_link"
+"l_bigarm_link" -> "l_rotatearm_joint" [label="xyz: 0 0 -0.1 \nrpy: 0 -0 1.5708"]
+"l_rotatearm_joint" -> "l_rotatearm_link"
+"l_rotatearm_link" -> "l_elbow_joint" [label="xyz: 0 0 -0.053 \nrpy: 3.14159 -0 3.14159"]
+"l_elbow_joint" -> "l_forearm_link"
+"l_forearm_link" -> "l_wrist_joint" [label="xyz: 0 0 0.1 \nrpy: 3.14159 -0 0"]
+"l_wrist_joint" -> "l_hand_link"
+"l_hand_link" -> "l_grasping_frame_joint" [label="xyz: 0 0 -0.07 \nrpy: 0 -0 0"]
+"l_grasping_frame_joint" -> "l_grasping_frame"
+"base_link" -> "r_shoulder_joint" [label="xyz: 0 -0.11 0.74 \nrpy: 0 -0 3.14159"]
+"r_shoulder_joint" -> "r_shoulder_link"
+"r_shoulder_link" -> "r_bigarm_joint" [label="xyz: 0 0.04 0 \nrpy: 0 -0 0"]
+"r_bigarm_joint" -> "r_bigarm_link"
+"r_bigarm_link" -> "r_rotatearm_joint" [label="xyz: 0 0 -0.1 \nrpy: 3.14159 3.30872e-24 1.5708"]
+"r_rotatearm_joint" -> "r_rotatearm_link"
+"r_rotatearm_link" -> "r_elbow_joint" [label="xyz: 0 0 0.053 \nrpy: 0 -0 0"]
+"r_elbow_joint" -> "r_forearm_link"
+"r_forearm_link" -> "r_wrist_joint" [label="xyz: 0 0 0.1 \nrpy: 0 -0 0"]
+"r_wrist_joint" -> "r_hand_link"
+"r_hand_link" -> "r_grasping_frame_joint" [label="xyz: 0 0 0.07 \nrpy: 0 -0 0"]
+"r_grasping_frame_joint" -> "r_grasping_frame"
+}

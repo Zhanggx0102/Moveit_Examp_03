@@ -1,0 +1,8 @@
+prefix=/home/shawn/1_catkin_files/ipal_files/22_moveit_example_3/install
+
+Name: rob_description
+Description: Description of rob_description
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/shawn/1_catkin_files/ipal_files/22_moveit_example_3/install/lib 
+Requires: 

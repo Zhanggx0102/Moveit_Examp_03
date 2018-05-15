@@ -1,0 +1,2 @@
+rob_moveit_pack/rob_control:rob_moveit_pack/rob_description:rob_moveit_pack/rob_moveit_config:rob_moveit_pack/rob_moveit_pack
+-DCATKIN_DEVEL_PREFIX=/home/shawn/1_catkin_files/ipal_files/22_moveit_example_3/devel -DCMAKE_INSTALL_PREFIX=/home/shawn/1_catkin_files/ipal_files/22_moveit_example_3/install -G Unix Makefiles
